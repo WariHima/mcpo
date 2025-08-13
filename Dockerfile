@@ -1,4 +1,5 @@
-FROM python:3.12-slim-bookworm
+FROM nvidia/cuda:12.9.1-cudnn-runtime-ubuntu24.04
+
 
 # Install uv (from official binary), nodejs, npm, and git
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
@@ -7,6 +8,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     curl \
     ca-certificates \
+    docker.io \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Node.js and npm via NodeSource 
