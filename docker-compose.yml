@@ -1,0 +1,28 @@
+
+services:
+
+
+  mcpo:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "18000:8000"
+    environment:
+      - DOCKER_HOST=unix:///var/run/docker.sock  # DoonDする設定
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock  # DooDする設定
+      - ./config.json:/app/config.json  # 後述のconfig.jsonと同期する設定
+      - ./local-mcp:/local-mcp
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command:
+      ["--config", "/app/config.json"]  # 元のDockerfileのCMDは`mcpo --help`なので上書き必須
+  
+  postgres-pgvector:
+    image: pgvector/pgvector:pg17
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=password
+
